@@ -1,0 +1,380 @@
+/* =========================
+   RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #0f172a;
+  color: #fff;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* =========================
+   ANIMATED BACKGROUND
+========================= */
+.bg-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.bg-blobs span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  animation: float 18s infinite ease-in-out;
+}
+
+.bg-blobs span:nth-child(1) {
+  width: 300px;
+  height: 300px;
+  background: #3b82f6;
+  top: 10%;
+  left: 10%;
+}
+
+.bg-blobs span:nth-child(2) {
+  width: 350px;
+  height: 350px;
+  background: #8b5cf6;
+  top: 55%;
+  right: 10%;
+  animation-delay: 4s;
+}
+
+.bg-blobs span:nth-child(3) {
+  width: 250px;
+  height: 250px;
+  background: #06b6d4;
+  bottom: 10%;
+  left: 35%;
+  animation-delay: 8s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -40px) scale(1.15);
+  }
+}
+
+/* =========================
+   UTILITIES
+========================= */
+.hidden {
+  display: none !important;
+}
+
+.glass-card,
+.auth-card,
+.sidebar,
+.topbar {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================
+   AUTH
+========================= */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-card {
+  width: 420px;
+  padding: 40px;
+  border-radius: 24px;
+  animation: fadeUp 0.7s ease;
+}
+
+.auth-card h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.auth-card p {
+  color: #cbd5e1;
+  margin-bottom: 24px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.input-group i {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px 14px 46px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.input-group input::placeholder {
+  color: #94a3b8;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(59,130,246,0.35);
+}
+
+.switch-text {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.switch-text a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+.dashboard {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.35s ease;
+  border-radius: 0 24px 24px 0;
+}
+
+.sidebar.collapsed {
+  width: 88px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.logo i {
+  font-size: 1.5rem;
+}
+
+.sidebar.collapsed .logo span,
+.sidebar.collapsed .menu span,
+.sidebar.collapsed .menu-link .fa-chevron-down {
+  display: none;
+}
+
+.toggle-btn {
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-item,
+.menu-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu-item > i,
+.menu-link i:first-child {
+  margin-right: 12px;
+}
+
+.menu-item:hover,
+.menu-link:hover,
+.menu-item.active {
+  background: rgba(255,255,255,0.12);
+}
+
+.menu-link > div {
+  display: flex;
+  align-items: center;
+}
+
+.submenu {
+  list-style: none;
+  margin-left: 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.has-submenu.open .submenu {
+  max-height: 200px;
+}
+
+.submenu li {
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submenu li:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+/* Main */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: auto;
+}
+
+.topbar {
+  padding: 18px 24px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.topbar h1 {
+  font-size: 1.6rem;
+}
+
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-box img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.content {
+  flex: 1;
+}
+
+.glass-card {
+  padding: 30px;
+  border-radius: 24px;
+  min-height: calc(100vh - 140px);
+  animation: fadeUp 0.5s ease;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    border-radius: 0;
+  }
+
+  .sidebar.show {
+    left: 0;
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .auth-card {
+    width: 92%;
+    padding: 30px 24px;
+  }
+
+  .topbar {
+    padding: 16px;
+  }
+
+  .glass-card {
+    padding: 20px;
+  }
+}
