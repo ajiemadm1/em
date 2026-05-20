@@ -4,19 +4,68 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbziE2uoPTZrjc3kYiYGmrNSRSbS4JXtBeUNIyjltUts0VEG0G4SuDOWgFgCbUxfvLoO/exec';
 
 // ========================================
+// GLOBAL VARIABLES
+// ========================================
+let currentUser = null;
+
+// ========================================
+// INITIALIZATION
+// ========================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Event Login
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', handleLogin);
+  }
+
+  // Event Signup
+  const signupForm = document.getElementById('signupForm');
+  if (signupForm) {
+    signupForm.addEventListener('submit', handleSignup);
+  }
+
+  // Restore session jika ada
+  restoreSession();
+});
+
+// ========================================
+// SHOW LOGIN / SIGNUP
+// ========================================
+function showLogin() {
+  const loginCard = document.getElementById('loginCard');
+  const signupCard = document.getElementById('signupCard');
+
+  if (loginCard) loginCard.classList.remove('hidden');
+  if (signupCard) signupCard.classList.add('hidden');
+}
+
+function showSignup() {
+  const loginCard = document.getElementById('loginCard');
+  const signupCard = document.getElementById('signupCard');
+
+  if (signupCard) signupCard.classList.remove('hidden');
+  if (loginCard) loginCard.classList.add('hidden');
+}
+
+// ========================================
 // API HELPER
 // ========================================
 async function api(action, data = {}) {
   try {
     const res = await fetch(API_URL, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
       body: JSON.stringify({
         action,
         ...data
       })
     });
+
     return await res.json();
   } catch (err) {
+    console.error(err);
     return {
       success: false,
       message: err.message
@@ -26,11 +75,6 @@ async function api(action, data = {}) {
 
 // ========================================
 // SIGN UP
-// Menyimpan ke:
-// 1. User_Ext  -> Username, Nama, PT, Email
-// 2. Pswd_Ext  -> Username, Password, Status
-// Username otomatis lowercase
-// Status default = Non Aktif
 // ========================================
 async function handleSignup(e) {
   e.preventDefault();
@@ -89,7 +133,6 @@ async function handleSignup(e) {
 
 // ========================================
 // LOGIN
-// Hanya user dengan Status = Aktif
 // ========================================
 async function handleLogin(e) {
   e.preventDefault();
@@ -134,8 +177,58 @@ async function handleLogin(e) {
 }
 
 // ========================================
+// RESTORE SESSION
+// ========================================
+function restoreSession() {
+  const session = localStorage.getItem('sessionUser');
+
+  if (!session) return;
+
+  currentUser = JSON.parse(session);
+  loadDashboard();
+}
+
+// ========================================
+// LOAD DASHBOARD
+// ========================================
+function loadDashboard() {
+  const authContainer = document.getElementById('authContainer');
+  const dashboard = document.getElementById('dashboard');
+  const userNameDisplay = document.getElementById('userNameDisplay');
+
+  if (authContainer) authContainer.classList.add('hidden');
+  if (dashboard) dashboard.classList.remove('hidden');
+
+  if (userNameDisplay && currentUser) {
+    userNameDisplay.textContent =
+      currentUser.fullname ||
+      currentUser.username ||
+      'User';
+  }
+
+  if (typeof showPage === 'function') {
+    showPage('home');
+  }
+}
+
+// ========================================
+// LOGOUT
+// ========================================
+function logout() {
+  localStorage.removeItem('sessionUser');
+  currentUser = null;
+
+  const authContainer = document.getElementById('authContainer');
+  const dashboard = document.getElementById('dashboard');
+
+  if (dashboard) dashboard.classList.add('hidden');
+  if (authContainer) authContainer.classList.remove('hidden');
+
+  showLogin();
+}
+
+// ========================================
 // UPDATE PROFILE
-// Update sheet User_Ext
 // ========================================
 async function handleProfileUpdate(e) {
   e.preventDefault();
@@ -184,7 +277,6 @@ async function handleProfileUpdate(e) {
 
 // ========================================
 // CHANGE PASSWORD
-// Update sheet Pswd_Ext
 // ========================================
 async function handlePasswordChange(e) {
   e.preventDefault();
