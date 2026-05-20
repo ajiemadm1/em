@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <!-- Background -->
+  <div class="bg-blobs">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 
+  <!-- Authentication -->
+  <div id="authContainer" class="auth-container">
+    <!-- Login -->
+    <div class="auth-card" id="loginCard">
+      <h2>Welcome Back</h2>
+      <p>Login to continue</p>
+
+      <form id="loginForm">
+        <div class="input-group">
+          <i class="fa fa-user"></i>
+          <input type="text" id="loginUsername" placeholder="Username" required />
+        </div>
+
+        <div class="input-group">
+          <i class="fa fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="Password" required />
+        </div>
+
+        <button type="submit" class="btn-primary">Login</button>
+      </form>
+
+      <p class="switch-text">
+        Don't have an account?
+        <a href="#" onclick="showSignup()">Sign Up</a>
+      </p>
+    </div>
+
+    <!-- Signup -->
+    <div class="auth-card hidden" id="signupCard">
+      <h2>Create Account</h2>
+      <p>Register a new user</p>
+
+      <form id="signupForm">
+        <div class="input-group">
+          <i class="fa fa-id-card"></i>
+          <input type="text" id="signupFullname" placeholder="Full Name" required />
+        </div>
+
+        <div class="input-group">
+          <i class="fa fa-envelope"></i>
+          <input type="email" id="signupEmail" placeholder="Email" required />
+        </div>
+
+        <div class="input-group">
+          <i class="fa fa-user"></i>
+          <input type="text" id="signupUsername" placeholder="Username" required />
+        </div>
+
+        <div class="input-group">
+          <i class="fa fa-lock"></i>
+          <input type="password" id="signupPassword" placeholder="Password" required />
+        </div>
+
+        <button type="submit" class="btn-primary">Sign Up</button>
+      </form>
+
+      <p class="switch-text">
+        Already have an account?
+        <a href="#" onclick="showLogin()">Login</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="dashboard hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <i class="fa fa-layer-group"></i>
+        <span>My Dashboard</span>
+      </div>
+
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <ul class="menu">
+        <li class="menu-item active" onclick="showPage('home')">
+          <i class="fa fa-home"></i>
+          <span>Home</span>
+        </li>
+
+        <li class="menu-item has-submenu">
+          <div class="menu-link" onclick="toggleSubmenu(this)">
+            <div>
+              <i class="fa fa-folder"></i>
+              <span>Master Data</span>
+            </div>
+            <i class="fa fa-chevron-down"></i>
+          </div>
+
+          <ul class="submenu">
+            <li onclick="showPage('users')">Users</li>
+            <li onclick="showPage('roles')">Roles</li>
+          </ul>
+        </li>
+
+        <li class="menu-item has-submenu">
+          <div class="menu-link" onclick="toggleSubmenu(this)">
+            <div>
+              <i class="fa fa-gear"></i>
+              <span>Settings</span>
+            </div>
+            <i class="fa fa-chevron-down"></i>
+          </div>
+
+          <ul class="submenu">
+            <li onclick="showPage('profile')">Edit Profile</li>
+            <li onclick="showPage('password')">Change Password</li>
+          </ul>
+        </li>
+
+        <li class="menu-item" onclick="logout()">
+          <i class="fa fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+      <header class="topbar">
+        <h1 id="pageTitle">Home</h1>
+        <div class="user-box">
+          <img
+            src="https://i.pravatar.cc/40"
+            alt="User"
+          />
+          <span id="userNameDisplay">Guest</span>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="pageContent" class="glass-card">
+          Welcome to the dashboard.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
