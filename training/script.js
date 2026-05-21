@@ -7,44 +7,65 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbziE2uoPTZrjc3kYiYGmrNS
 // GLOBAL VARIABLES
 // ========================================
 let currentUser = null;
+let pendingUsername = null;
 
 // ========================================
 // INITIALIZATION
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Event Login
+
+  // Login Form
   const loginForm = document.getElementById('loginForm');
   if (loginForm) {
     loginForm.addEventListener('submit', handleLogin);
   }
 
-  // Event Signup
+  // Signup Form
   const signupForm = document.getElementById('signupForm');
   if (signupForm) {
     signupForm.addEventListener('submit', handleSignup);
   }
 
-  // Restore session jika ada
+  // OTP Form
+  const otpForm = document.getElementById('otpForm');
+  if (otpForm) {
+    otpForm.addEventListener('submit', handleVerifyOtp);
+  }
+
   restoreSession();
 });
 
 // ========================================
-// SHOW LOGIN / SIGNUP
+// SHOW LOGIN / SIGNUP / OTP
 // ========================================
 function showLogin() {
-  const loginCard = document.getElementById('loginCard');
-  const signupCard = document.getElementById('signupCard');
+  hideAllAuthCards();
 
-  if (loginCard) loginCard.classList.remove('hidden');
-  if (signupCard) signupCard.classList.add('hidden');
+  document
+    .getElementById('loginCard')
+    ?.classList.remove('hidden');
 }
 
 function showSignup() {
-  const loginCard = document.getElementById('loginCard');
-  const signupCard = document.getElementById('signupCard');
+  hideAllAuthCards();
 
-  if (signupCard) signupCard.classList.remove('hidden');
-  if (loginCard) loginCard.classList.add('hidden');
+  document
+    .getElementById('signupCard')
+    ?.classList.remove('hidden');
+}
+
+function showOtpCard() {
+  hideAllAuthCards();
+
+  document
+    .getElementById('otpCard')
+    ?.classList.remove('hidden');
+}
+
+function hideAllAuthCards() {
+  document
+    .querySelectorAll('.auth-card')
+    .forEach(card => card.classList.add('hidden'));
 }
 
 // ========================================
@@ -64,8 +85,10 @@ async function api(action, data = {}) {
     });
 
     return await res.json();
+
   } catch (err) {
     console.error(err);
+
     return {
       success: false,
       message: err.message
@@ -105,34 +128,51 @@ async function handleSignup(e) {
     .value;
 
   if (!fullname || !email || !username || !password) {
-    alert('Please complete all fields.');
+    showMessage(
+      'Incomplete Data',
+      'Please complete all fields.',
+      'warning'
+    );
     return;
   }
 
+  showLoading();
+
   const res = await api('signup', {
-    username,
     fullname,
     company,
     email,
+    username,
     password
   });
 
+  hideLoading();
+
   if (!res.success) {
-    alert(res.message || 'Registration failed.');
+    showMessage(
+      'Registration Failed',
+      res.message,
+      'error'
+    );
     return;
   }
 
-  alert(
-    'Registration successful.\n' +
-    'Your account is waiting for admin activation.'
+  showMessage(
+    'Registration Successful',
+    'Your account is waiting for admin activation.',
+    'success'
   );
 
   document.getElementById('signupForm').reset();
-  showLogin();
+
+  setTimeout(() => {
+    closeModal();
+    showLogin();
+  }, 1500);
 }
 
 // ========================================
-// LOGIN
+// LOGIN STEP 1
 // ========================================
 async function handleLogin(e) {
   e.preventDefault();
@@ -147,22 +187,82 @@ async function handleLogin(e) {
     .getElementById('loginPassword')
     .value;
 
-  const btn = e.target.querySelector('button');
-  const original = btn.innerHTML;
+  if (!username || !password) {
+    showMessage(
+      'Login Failed',
+      'Username and password are required.',
+      'warning'
+    );
+    return;
+  }
 
-  btn.disabled = true;
-  btn.innerHTML = 'Signing in...';
+  showLoading();
 
   const res = await api('login', {
     username,
     password
   });
 
-  btn.disabled = false;
-  btn.innerHTML = original;
+  hideLoading();
 
   if (!res.success) {
-    alert(res.message || 'Login failed.');
+    showMessage(
+      'Login Failed',
+      res.message,
+      'error'
+    );
+    return;
+  }
+
+  pendingUsername = username;
+
+  showMessage(
+    'Verification Code Sent',
+    'Please check your email for the verification code.',
+    'success'
+  );
+
+  setTimeout(() => {
+    closeModal();
+    showOtpCard();
+  }, 1500);
+}
+
+// ========================================
+// VERIFY OTP STEP 2
+// ========================================
+async function handleVerifyOtp(e) {
+  e.preventDefault();
+
+  const otp = document
+    .getElementById('otpCode')
+    .value
+    .trim();
+
+  if (!otp) {
+    showMessage(
+      'Verification Failed',
+      'Please input verification code.',
+      'warning'
+    );
+    return;
+  }
+
+  showLoading();
+
+  const res = await api('verifyOtp', {
+    username: pendingUsername,
+    otp
+  });
+
+  hideLoading();
+
+  if (!res.success) {
+    showMessage(
+      'Verification Failed',
+      res.message,
+      'error'
+    );
     return;
   }
 
@@ -173,7 +273,16 @@ async function handleLogin(e) {
     JSON.stringify(currentUser)
   );
 
-  loadDashboard();
+  showMessage(
+    'Login Successful',
+    'Welcome back ' + currentUser.fullname,
+    'success'
+  );
+
+  setTimeout(() => {
+    closeModal();
+    loadDashboard();
+  }, 1200);
 }
 
 // ========================================
@@ -185,6 +294,7 @@ function restoreSession() {
   if (!session) return;
 
   currentUser = JSON.parse(session);
+
   loadDashboard();
 }
 
@@ -192,19 +302,18 @@ function restoreSession() {
 // LOAD DASHBOARD
 // ========================================
 function loadDashboard() {
-  const authContainer = document.getElementById('authContainer');
-  const dashboard = document.getElementById('dashboard');
-  const userNameDisplay = document.getElementById('userNameDisplay');
 
-  if (authContainer) authContainer.classList.add('hidden');
-  if (dashboard) dashboard.classList.remove('hidden');
+  document
+    .getElementById('authContainer')
+    ?.classList.add('hidden');
 
-  if (userNameDisplay && currentUser) {
-    userNameDisplay.textContent =
-      currentUser.fullname ||
-      currentUser.username ||
-      'User';
-  }
+  document
+    .getElementById('dashboard')
+    ?.classList.remove('hidden');
+
+  document
+    .getElementById('userNameDisplay')
+    .textContent = currentUser.fullname || currentUser.username;
 
   if (typeof showPage === 'function') {
     showPage('home');
@@ -215,14 +324,18 @@ function loadDashboard() {
 // LOGOUT
 // ========================================
 function logout() {
+
   localStorage.removeItem('sessionUser');
+
   currentUser = null;
 
-  const authContainer = document.getElementById('authContainer');
-  const dashboard = document.getElementById('dashboard');
+  document
+    .getElementById('dashboard')
+    ?.classList.add('hidden');
 
-  if (dashboard) dashboard.classList.add('hidden');
-  if (authContainer) authContainer.classList.remove('hidden');
+  document
+    .getElementById('authContainer')
+    ?.classList.remove('hidden');
 
   showLogin();
 }
@@ -238,41 +351,54 @@ async function handleProfileUpdate(e) {
     .value
     .trim();
 
-  const email = document
-    .getElementById('profileEmail')
-    .value
-    .trim();
-
   const company = document
     .getElementById('profileCompany')
     ?.value
     .trim() || '';
 
+  const email = document
+    .getElementById('profileEmail')
+    .value
+    .trim();
+
+  showLoading();
+
   const res = await api('updateProfile', {
-    username: currentUser.username.toLowerCase(),
+    username: currentUser.username,
     fullname,
-    email,
-    company
+    company,
+    email
   });
 
+  hideLoading();
+
   if (!res.success) {
-    alert(res.message || 'Update failed.');
+    showMessage(
+      'Update Failed',
+      res.message,
+      'error'
+    );
     return;
   }
 
   currentUser.fullname = fullname;
-  currentUser.email = email;
   currentUser.company = company;
+  currentUser.email = email;
 
   localStorage.setItem(
     'sessionUser',
     JSON.stringify(currentUser)
   );
 
-  document.getElementById('userNameDisplay').textContent =
-    fullname;
+  document
+    .getElementById('userNameDisplay')
+    .textContent = fullname;
 
-  alert('Profile updated successfully.');
+  showMessage(
+    'Profile Updated',
+    'Your profile has been updated successfully.',
+    'success'
+  );
 }
 
 // ========================================
@@ -281,28 +407,275 @@ async function handleProfileUpdate(e) {
 async function handlePasswordChange(e) {
   e.preventDefault();
 
-  const oldPassword =
-    document.getElementById('oldPassword').value;
+  const oldPassword = document
+    .getElementById('oldPassword')
+    .value;
 
-  const newPassword =
-    document.getElementById('newPassword').value;
+  const newPassword = document
+    .getElementById('newPassword')
+    .value;
 
   if (newPassword.length < 6) {
-    alert('New password must be at least 6 characters.');
+    showMessage(
+      'Invalid Password',
+      'Password minimum 6 characters.',
+      'warning'
+    );
     return;
   }
 
+  showLoading();
+
   const res = await api('changePassword', {
-    username: currentUser.username.toLowerCase(),
+    username: currentUser.username,
     oldPassword,
     newPassword
   });
 
+  hideLoading();
+
   if (!res.success) {
-    alert(res.message || 'Password change failed.');
+    showMessage(
+      'Password Change Failed',
+      res.message,
+      'error'
+    );
     return;
   }
 
-  alert('Password changed successfully.');
-  document.getElementById('passwordForm').reset();
+  document
+    .getElementById('passwordForm')
+    ?.reset();
+
+  showMessage(
+    'Password Changed',
+    'Password updated successfully.',
+    'success'
+  );
+}
+
+// ========================================
+// SHOW / HIDE PASSWORD
+// ========================================
+function togglePassword(inputId, el) {
+  const input = document.getElementById(inputId);
+  const icon = el.querySelector('i');
+
+  if (!input || !icon) return;
+
+  if (input.type === 'password') {
+    input.type = 'text';
+
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+
+  } else {
+    input.type = 'password';
+
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+}
+
+// ========================================
+// CUSTOM MODAL
+// ========================================
+function showMessage(title, message, type = 'info') {
+
+  const modal = document.getElementById('customModal');
+  const icon = document.getElementById('modalIcon');
+  const titleEl = document.getElementById('modalTitle');
+  const messageEl = document.getElementById('modalMessage');
+
+  const icons = {
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️'
+  };
+
+  icon.textContent = icons[type] || 'ℹ️';
+
+  titleEl.textContent = title;
+  messageEl.innerHTML = message;
+
+  modal.classList.remove('hidden');
+}
+
+function closeModal() {
+  document
+    .getElementById('customModal')
+    ?.classList.add('hidden');
+}
+
+// ========================================
+// LOADING OVERLAY
+// ========================================
+function showLoading() {
+  document
+    .getElementById('loadingOverlay')
+    ?.classList.remove('hidden');
+}
+
+function hideLoading() {
+  document
+    .getElementById('loadingOverlay')
+    ?.classList.add('hidden');
+}
+
+// ========================================
+// SIDEBAR
+// ========================================
+function toggleSidebar() {
+
+  const sidebar = document.getElementById('sidebar');
+
+  if (window.innerWidth <= 768) {
+    sidebar.classList.toggle('show');
+  } else {
+    sidebar.classList.toggle('collapsed');
+  }
+}
+
+function toggleSubmenu(element) {
+
+  const parent = element.closest('.has-submenu');
+
+  if (
+    document
+      .getElementById('sidebar')
+      .classList.contains('collapsed')
+  ) {
+    return;
+  }
+
+  parent.classList.toggle('open');
+}
+
+// ========================================
+// SIMPLE PAGE ROUTER
+// ========================================
+function showPage(page) {
+
+  const title = document.getElementById('pageTitle');
+  const content = document.getElementById('pageContent');
+
+  const pages = {
+
+    home: {
+      title: 'Home',
+      html: `
+        <h2>Welcome ${currentUser.fullname}</h2>
+        <p>Dashboard loaded successfully.</p>
+      `
+    },
+
+    profile: {
+      title: 'Edit Profile',
+      html: `
+
+        <form id="profileForm">
+
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input
+              type="text"
+              id="profileFullname"
+              value="${currentUser.fullname || ''}"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-building"></i>
+            <input
+              type="text"
+              id="profileCompany"
+              value="${currentUser.company || ''}"
+            />
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-envelope"></i>
+            <input
+              type="email"
+              id="profileEmail"
+              value="${currentUser.email || ''}"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn-primary">
+            Save Profile
+          </button>
+
+        </form>
+      `
+    },
+
+    password: {
+      title: 'Change Password',
+      html: `
+
+        <form id="passwordForm">
+
+          <div class="input-group password-group">
+            <i class="fa fa-lock"></i>
+
+            <input
+              type="password"
+              id="oldPassword"
+              placeholder="Old Password"
+              required
+            />
+
+            <span
+              class="toggle-password"
+              onclick="togglePassword('oldPassword', this)">
+              <i class="fa fa-eye"></i>
+            </span>
+          </div>
+
+          <div class="input-group password-group">
+            <i class="fa fa-lock"></i>
+
+            <input
+              type="password"
+              id="newPassword"
+              placeholder="New Password"
+              required
+            />
+
+            <span
+              class="toggle-password"
+              onclick="togglePassword('newPassword', this)">
+              <i class="fa fa-eye"></i>
+            </span>
+          </div>
+
+          <button type="submit" class="btn-primary">
+            Change Password
+          </button>
+
+        </form>
+      `
+    }
+  };
+
+  const pageData = pages[page] || pages.home;
+
+  title.textContent = pageData.title;
+  content.innerHTML = pageData.html;
+
+  if (page === 'profile') {
+    document
+      .getElementById('profileForm')
+      ?.addEventListener('submit', handleProfileUpdate);
+  }
+
+  if (page === 'password') {
+    document
+      .getElementById('passwordForm')
+      ?.addEventListener('submit', handlePasswordChange);
+  }
 }
