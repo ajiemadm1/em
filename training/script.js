@@ -291,6 +291,16 @@ async function handleVerifyOtp(e) {
 }
 
 // ========================================
+// ACCESS CONTROL
+// ========================================
+function hasAccess(level) {
+  return (
+    Number(currentUser?.accessLevel || 0)
+    >= Number(level)
+  );
+}
+
+// ========================================
 // RESTORE SESSION
 // ========================================
 function restoreSession() {
