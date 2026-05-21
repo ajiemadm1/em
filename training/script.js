@@ -12,7 +12,7 @@ let pendingUsername = null;
 // ========================================
 // AUTO LOGOUT CONFIG (ms)
 // ========================================
-const AUTO_LOGOUT_TIME = 10000;
+const AUTO_LOGOUT_TIME = 900000;
 
 // ========================================
 // INITIALIZATION
