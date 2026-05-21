@@ -10,6 +10,12 @@ let currentUser = null;
 let pendingUsername = null;
 
 // ========================================
+// AUTO LOGOUT CONFIG
+// ========================================
+const AUTO_LOGOUT_TIME = 60 * 60 * 1000; // 1 hour
+let inactivityTimer;
+
+// ========================================
 // INITIALIZATION
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -316,8 +322,10 @@ function loadDashboard() {
     .textContent = currentUser.fullname || currentUser.username;
 
   if (typeof showPage === 'function') {
-    showPage('home');
+  showPage('home');
   }
+  initAutoLogout();
+  
 }
 
 // ========================================
@@ -328,6 +336,7 @@ function logout() {
   localStorage.removeItem('sessionUser');
 
   currentUser = null;
+  clearTimeout(inactivityTimer);
 
   document
     .getElementById('dashboard')
@@ -678,4 +687,48 @@ function showPage(page) {
       .getElementById('passwordForm')
       ?.addEventListener('submit', handlePasswordChange);
   }
+}
+
+// ========================================
+// AUTO LOGOUT
+// ========================================
+function resetInactivityTimer() {
+
+  clearTimeout(inactivityTimer);
+
+  inactivityTimer = setTimeout(() => {
+
+    showMessage(
+      'Session Expired',
+      'You have been logged out due to inactivity.',
+      'warning'
+    );
+
+    setTimeout(() => {
+      closeModal();
+      logout();
+    }, 2000);
+
+  }, AUTO_LOGOUT_TIME);
+}
+
+function initAutoLogout() {
+
+  const events = [
+    'mousemove',
+    'mousedown',
+    'keypress',
+    'scroll',
+    'touchstart',
+    'click'
+  ];
+
+  events.forEach(event => {
+    document.addEventListener(
+      event,
+      resetInactivityTimer
+    );
+  });
+
+  resetInactivityTimer();
 }
