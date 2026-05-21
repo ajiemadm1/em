@@ -1,163 +1,457 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modern Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
-  <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    rel="stylesheet"
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
   />
+
+  <title>Training</title>
+
+  <!-- FONT AWESOME -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <!-- STYLE -->
+  <link rel="stylesheet" href="style.css" />
+
 </head>
+
 <body>
-  <!-- Background -->
-  <div class="bg-blobs">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
 
-  <!-- Authentication -->
+  <!-- =====================================================
+       AUTH CONTAINER
+  ====================================================== -->
   <div id="authContainer" class="auth-container">
-    <!-- Login -->
-    <div class="auth-card" id="loginCard">
-      <h2>Welcome Back</h2>
-      <p>Login to continue</p>
 
-      <form id="loginForm">
-        <div class="input-group">
-          <i class="fa fa-user"></i>
-          <input type="text" id="loginUsername" placeholder="Username" required />
-        </div>
+    <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+    <div id="loginCard" class="auth-card">
 
-        <div class="input-group">
-          <i class="fa fa-lock"></i>
-          <input type="password" id="loginPassword" placeholder="Password" required />
-        </div>
-
-        <button type="submit" class="btn-primary">Login</button>
-      </form>
-
-      <p class="switch-text">
-        Don't have an account?
-        <a href="#" onclick="showSignup()">Sign Up</a>
-      </p>
-    </div>
-
-    <!-- Signup -->
-    <div class="auth-card hidden" id="signupCard">
-      <h2>Create Account</h2>
-      <p>Register a new user</p>
-
-      <form id="signupForm">
-        <div class="input-group">
-          <i class="fa fa-id-card"></i>
-          <input type="text" id="signupFullname" placeholder="Full Name" required />
-        </div>
-
-        <div class="input-group">
-          <i class="fa fa-envelope"></i>
-          <input type="email" id="signupEmail" placeholder="Email" required />
-        </div>
-
-        <div class="input-group">
-          <i class="fa fa-user"></i>
-          <input type="text" id="signupUsername" placeholder="Username" required />
-        </div>
-
-        <div class="input-group">
-          <i class="fa fa-lock"></i>
-          <input type="password" id="signupPassword" placeholder="Password" required />
-        </div>
-
-        <button type="submit" class="btn-primary">Sign Up</button>
-      </form>
-
-      <p class="switch-text">
-        Already have an account?
-        <a href="#" onclick="showLogin()">Login</a>
-      </p>
-    </div>
-  </div>
-
-  <!-- Dashboard -->
-  <div id="dashboard" class="dashboard hidden">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="logo">
-        <i class="fa fa-layer-group"></i>
-        <span>My Dashboard</span>
+      <div class="auth-logo">
+        <h1>WELCOME</h1>
+        <p>Login to your dashboard</p>
       </div>
 
-      <button class="toggle-btn" onclick="toggleSidebar()">
-        <i class="fa fa-bars"></i>
-      </button>
+      <form id="loginForm">
 
-      <ul class="menu">
-        <li class="menu-item active" onclick="showPage('home')">
-          <i class="fa fa-home"></i>
-          <span>Home</span>
-        </li>
+        <!-- Username -->
+        <div class="input-group">
+          <i class="fa fa-user"></i>
 
-        <li class="menu-item has-submenu">
-          <div class="menu-link" onclick="toggleSubmenu(this)">
-            <div>
-              <i class="fa fa-folder"></i>
-              <span>Master Data</span>
-            </div>
-            <i class="fa fa-chevron-down"></i>
-          </div>
-
-          <ul class="submenu">
-            <li onclick="showPage('users')">Users</li>
-            <li onclick="showPage('roles')">Roles</li>
-          </ul>
-        </li>
-
-        <li class="menu-item has-submenu">
-          <div class="menu-link" onclick="toggleSubmenu(this)">
-            <div>
-              <i class="fa fa-gear"></i>
-              <span>Settings</span>
-            </div>
-            <i class="fa fa-chevron-down"></i>
-          </div>
-
-          <ul class="submenu">
-            <li onclick="showPage('profile')">Edit Profile</li>
-            <li onclick="showPage('password')">Change Password</li>
-          </ul>
-        </li>
-
-        <li class="menu-item" onclick="logout()">
-          <i class="fa fa-sign-out-alt"></i>
-          <span>Logout</span>
-        </li>
-      </ul>
-    </aside>
-
-    <!-- Main -->
-    <main class="main-content">
-      <header class="topbar">
-        <h1 id="pageTitle">Home</h1>
-        <div class="user-box">
-          <img
-            src="https://i.pravatar.cc/40"
-            alt="User"
+          <input
+            type="text"
+            id="loginUsername"
+            placeholder="Username"
+            required
           />
-          <span id="userNameDisplay">Guest</span>
         </div>
-      </header>
 
-      <section class="content">
-        <div id="pageContent" class="glass-card">
-          Welcome to the dashboard.
+        <!-- Password -->
+        <div class="input-group password-group">
+
+          <i class="fa fa-lock"></i>
+
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+          />
+
+          <span
+            class="toggle-password"
+            onclick="togglePassword('loginPassword', this)"
+          >
+            <i class="fa fa-eye"></i>
+          </span>
+
         </div>
-      </section>
-    </main>
+
+        <button type="submit" class="btn-primary">
+          Login
+        </button>
+
+      </form>
+
+      <div class="auth-switch">
+        Don't have an account?
+        <a href="#" onclick="showSignup()">
+          Sign Up
+        </a>
+      </div>
+
+    </div>
+
+    <!-- =====================================================
+         SIGNUP
+    ====================================================== -->
+    <div id="signupCard" class="auth-card hidden">
+
+      <div class="auth-logo">
+        <h1>CREATE ACCOUNT</h1>
+        <p>Register new account</p>
+      </div>
+
+      <form id="signupForm">
+
+        <!-- Fullname -->
+        <div class="input-group">
+          <i class="fa fa-user"></i>
+
+          <input
+            type="text"
+            id="signupFullname"
+            placeholder="Full Name"
+            required
+          />
+        </div>
+
+        <!-- Company -->
+        <div class="input-group">
+          <i class="fa fa-building"></i>
+
+          <input
+            type="text"
+            id="signupCompany"
+            placeholder="Company"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="input-group">
+          <i class="fa fa-envelope"></i>
+
+          <input
+            type="email"
+            id="signupEmail"
+            placeholder="Email"
+            required
+          />
+        </div>
+
+        <!-- Username -->
+        <div class="input-group">
+          <i class="fa fa-at"></i>
+
+          <input
+            type="text"
+            id="signupUsername"
+            placeholder="Username"
+            required
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="input-group password-group">
+
+          <i class="fa fa-lock"></i>
+
+          <input
+            type="password"
+            id="signupPassword"
+            placeholder="Password"
+            required
+          />
+
+          <span
+            class="toggle-password"
+            onclick="togglePassword('signupPassword', this)"
+          >
+            <i class="fa fa-eye"></i>
+          </span>
+
+        </div>
+
+        <button type="submit" class="btn-primary">
+          Create Account
+        </button>
+
+      </form>
+
+      <div class="auth-switch">
+        Already have an account?
+        <a href="#" onclick="showLogin()">
+          Login
+        </a>
+      </div>
+
+    </div>
+
+    <!-- =====================================================
+         OTP VERIFICATION
+    ====================================================== -->
+    <div id="otpCard" class="auth-card hidden">
+
+      <div class="auth-logo">
+        <h1>OTP VERIFICATION</h1>
+        <p>
+          Verification code has been sent to your email
+        </p>
+      </div>
+
+      <form id="otpForm">
+
+        <div class="input-group">
+          <i class="fa fa-shield-halved"></i>
+
+          <input
+            type="text"
+            id="otpCode"
+            placeholder="Enter OTP Code"
+            maxlength="6"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn-primary">
+          Verify OTP
+        </button>
+
+      </form>
+
+      <div class="auth-switch">
+        <a href="#" onclick="showLogin()">
+          Back to Login
+        </a>
+      </div>
+
+    </div>
+
   </div>
 
+  <!-- =====================================================
+       DASHBOARD
+  ====================================================== -->
+  <div id="dashboard" class="dashboard hidden">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+    <aside id="sidebar" class="sidebar">
+
+      <!-- Sidebar Header -->
+      <div class="sidebar-header">
+
+        <h2>MY APP</h2>
+
+        <button
+          class="sidebar-toggle"
+          onclick="toggleSidebar()"
+        >
+          <i class="fa fa-bars"></i>
+        </button>
+
+      </div>
+
+      <!-- Sidebar Menu -->
+      <div class="sidebar-menu">
+
+        <!-- HOME -->
+        <div class="menu-item">
+
+          <div
+            class="menu-link"
+            onclick="showPage('home')"
+          >
+            <i class="fa fa-house"></i>
+            <span>Home</span>
+          </div>
+
+        </div>
+
+        <!-- PROFILE -->
+        <div class="menu-item has-submenu">
+
+          <div
+            class="menu-link"
+            onclick="toggleSubmenu(this)"
+          >
+            <i class="fa fa-user"></i>
+            <span>Profile</span>
+          </div>
+
+          <div class="submenu">
+
+            <a
+              href="#"
+              onclick="showPage('profile')"
+            >
+              Edit Profile
+            </a>
+
+            <a
+              href="#"
+              onclick="showPage('password')"
+            >
+              Change Password
+            </a>
+
+          </div>
+
+        </div>
+
+        <!-- REPORT -->
+        <div class="menu-item has-submenu">
+
+          <div
+            class="menu-link"
+            onclick="toggleSubmenu(this)"
+          >
+            <i class="fa fa-chart-line"></i>
+            <span>Reports</span>
+          </div>
+
+          <div class="submenu">
+
+            <a href="#">
+              Daily Report
+            </a>
+
+            <a href="#">
+              Monthly Report
+            </a>
+
+            <a href="#">
+              Analytics
+            </a>
+
+          </div>
+
+        </div>
+
+        <!-- SETTINGS -->
+        <div class="menu-item">
+
+          <div
+            class="menu-link"
+            onclick="showPage('settings')"
+          >
+            <i class="fa fa-gear"></i>
+            <span>Settings</span>
+          </div>
+
+        </div>
+
+        <!-- LOGOUT -->
+        <div class="menu-item">
+
+          <div
+            class="menu-link"
+            onclick="logout()"
+          >
+            <i class="fa fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+    <main class="main-content">
+
+      <!-- TOPBAR -->
+      <div class="topbar">
+
+        <h1 id="pageTitle">
+          Dashboard
+        </h1>
+
+        <div class="user-info">
+
+          <div class="user-avatar">
+            <i class="fa fa-user"></i>
+          </div>
+
+          <div>
+            <div id="userNameDisplay">
+              User
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PAGE CONTENT -->
+      <div class="page-content">
+
+        <div class="card">
+
+          <div id="pageContent">
+            Welcome Dashboard
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- =====================================================
+       CUSTOM MODAL
+  ====================================================== -->
+  <div id="customModal" class="custom-modal hidden">
+
+    <div class="modal-box">
+
+      <div id="modalIcon" class="modal-icon">
+        ℹ️
+      </div>
+
+      <h3 id="modalTitle">
+        Information
+      </h3>
+
+      <p id="modalMessage">
+        Message here
+      </p>
+
+      <button
+        class="btn-primary"
+        onclick="closeModal()"
+      >
+        OK
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================================
+       LOADING OVERLAY
+  ====================================================== -->
+  <div
+    id="loadingOverlay"
+    class="loading-overlay hidden"
+  >
+
+    <div class="loader-box">
+
+      <div class="spinner"></div>
+
+      <p>Please wait...</p>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================================
+       SCRIPT
+  ====================================================== -->
   <script src="script.js"></script>
+
 </body>
 </html>
