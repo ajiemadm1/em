@@ -12,7 +12,7 @@ let pendingUsername = null;
 // ========================================
 // AUTO LOGOUT CONFIG
 // ========================================
-const AUTO_LOGOUT_TIME = 60 * 60 * 1000; // 1 hour
+const AUTO_LOGOUT_TIME = 1 * 60 * 1000; // 1 hour
 let inactivityTimer;
 
 // ========================================
