@@ -10,10 +10,9 @@ let currentUser = null;
 let pendingUsername = null;
 
 // ========================================
-// AUTO LOGOUT CONFIG
+// AUTO LOGOUT CONFIG (ms)
 // ========================================
-const AUTO_LOGOUT_TIME = 1 * 60 * 1000; // 1 hour
-let inactivityTimer;
+const AUTO_LOGOUT_TIME = 10000;
 
 // ========================================
 // INITIALIZATION
@@ -324,6 +323,7 @@ function loadDashboard() {
   if (typeof showPage === 'function') {
   showPage('home');
   }
+  
   initAutoLogout();
   
 }
@@ -692,6 +692,8 @@ function showPage(page) {
 // ========================================
 // AUTO LOGOUT
 // ========================================
+let inactivityTimer;
+
 function resetInactivityTimer() {
 
   clearTimeout(inactivityTimer);
@@ -707,7 +709,7 @@ function resetInactivityTimer() {
     setTimeout(() => {
       closeModal();
       logout();
-    }, 2000);
+    }, 1500);
 
   }, AUTO_LOGOUT_TIME);
 }
