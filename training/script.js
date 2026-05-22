@@ -288,6 +288,9 @@ async function handleLogin(e) {
   }
 
   pendingUsername = username;
+  document.getElementById(
+  'loginPassword'
+).value = '';
 
   showMessage(
     'Verification Code Sent',
@@ -469,6 +472,14 @@ async function logout() {
     .getElementById('authContainer')
     ?.classList.remove('hidden');
 
+  document
+  .querySelectorAll(
+    'input[type="password"]'
+  )
+  .forEach(input => {
+    input.value = '';
+  });
+  
   showLogin();
 }
 
