@@ -13,6 +13,7 @@ let pendingUsername = null;
 // AUTO LOGOUT CONFIG (ms)
 // ========================================
 const AUTO_LOGOUT_TIME = 900000;
+let logoutTimer;
 
 // ========================================
 // INITIALIZATION
@@ -36,6 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (otpForm) {
     otpForm.addEventListener('submit', handleVerifyOtp);
   }
+
+  [
+    'click',
+    'mousemove',
+    'keydown',
+    'scroll',
+    'touchstart'
+  ].forEach(event => {
+    document.addEventListener(
+      event,
+      resetLogoutTimer
+    );
+  });
 
   restoreSession();
 });
@@ -85,7 +99,13 @@ async function api(action, data = {}) {
       },
       body: JSON.stringify({
         action,
-        ...data
+        token:
+          localStorage.getItem(
+           'sessionToken'
+          ) || '',
+        fingerprint:
+          getFingerprint(),
+          ...data
       })
     });
 
@@ -272,6 +292,10 @@ async function handleVerifyOtp(e) {
   }
 
   currentUser = res.user;
+  localStorage.setItem(
+    'sessionToken',
+    res.token
+  );
 
   localStorage.setItem(
     'sessionUser',
@@ -303,12 +327,42 @@ function hasAccess(level) {
 // ========================================
 // RESTORE SESSION
 // ========================================
-function restoreSession() {
-  const session = localStorage.getItem('sessionUser');
+async function restoreSession() {
 
-  if (!session) return;
+  const token =
+    localStorage.getItem(
+      'sessionToken'
+    );
 
-  currentUser = JSON.parse(session);
+  if (!token) return;
+
+  showLoading();
+
+  const res = await api(
+    'restoreSession'
+  );
+
+  hideLoading();
+
+  if (!res.success) {
+
+    localStorage.removeItem(
+      'sessionToken'
+    );
+
+    localStorage.removeItem(
+      'sessionUser'
+    );
+
+    return;
+  }
+
+  currentUser = res.user;
+
+  localStorage.setItem(
+    'sessionUser',
+    JSON.stringify(currentUser)
+  );
 
   loadDashboard();
 }
@@ -335,18 +389,29 @@ function loadDashboard() {
   }
   
   initAutoLogout();
-  
+  resetLogoutTimer();
 }
 
 // ========================================
 // LOGOUT
 // ========================================
-function logout() {
+async function logout() {
 
-  localStorage.removeItem('sessionUser');
+  try {
+
+    await api('logout');
+
+  } catch(err) {}
+
+  localStorage.removeItem(
+    'sessionUser'
+  );
+
+  localStorage.removeItem(
+    'sessionToken'
+  );
 
   currentUser = null;
-  clearTimeout(inactivityTimer);
 
   document
     .getElementById('dashboard')
@@ -743,4 +808,37 @@ function initAutoLogout() {
   });
 
   resetInactivityTimer();
+}
+
+function getFingerprint() {
+
+  return btoa(
+    navigator.userAgent +
+    navigator.language +
+    screen.width +
+    screen.height +
+    Intl.DateTimeFormat()
+      .resolvedOptions()
+      .timeZone
+  );
+}
+
+function resetLogoutTimer() {
+
+  clearTimeout(logoutTimer);
+
+  logoutTimer = setTimeout(() => {
+
+    showMessage(
+      'Session Expired',
+      'Logged out due to inactivity.',
+      'warning'
+    );
+
+    setTimeout(() => {
+      logout();
+    }, 1200);
+
+  }, AUTO_LOGOUT_TIME);
+
 }
