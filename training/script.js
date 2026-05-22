@@ -91,34 +91,82 @@ function hideAllAuthCards() {
 // API HELPER
 // ========================================
 async function api(action, data = {}) {
+
   try {
+
     const res = await fetch(API_URL, {
+
       method: 'POST',
+
       headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
+        'Content-Type':
+          'text/plain;charset=utf-8'
       },
+
       body: JSON.stringify({
+
         action,
+
         token:
           localStorage.getItem(
-           'sessionToken'
+            'sessionToken'
           ) || '',
+
         fingerprint:
           getFingerprint(),
-          ...data
+
+        ...data
+
       })
+
     });
 
-    return await res.json();
+    // ========================================
+    // RESPONSE
+    // ========================================
 
-  } catch (err) {
+    const json =
+      await res.json();
+
+    // ========================================
+    // AUTO SESSION CHECK
+    // ========================================
+
+    if (
+      json.message ===
+      'Session expired'
+      ||
+      json.message ===
+      'Invalid session'
+    ) {
+
+      showMessage(
+        'Session Expired',
+        'Please login again.',
+        'warning'
+      );
+
+      setTimeout(() => {
+        logout();
+      }, 1500);
+
+    }
+
+    return json;
+
+  } catch(err) {
+
     console.error(err);
 
     return {
+
       success: false,
       message: err.message
+
     };
+
   }
+
 }
 
 // ========================================
