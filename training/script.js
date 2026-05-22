@@ -707,10 +707,20 @@ function showPage(page) {
 
     home: {
       title: 'Home',
-      html: `
+      html: 
+        <!--`
         <h2>Welcome ${currentUser.fullname}</h2>
         <p>Dashboard loaded successfully.</p>
-      `
+         -->
+      `  <iframe
+         src="https://datastudio.google.com/embed/reporting/872610ff-5cf7-4c01-ac0e-418f6a53d57c/page/p_7v9hglpe3d"
+            width="100%"
+            height="900"
+            style="border:none; border-radius:10px;"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen>
+          </iframe>
     },
 
     profile: {
