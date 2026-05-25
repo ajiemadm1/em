@@ -491,3 +491,78 @@ body {
     padding: 30px 24px;
   }
 }
+
+#map{
+
+  width:100%;
+
+  height:calc(100vh - 180px);
+
+  border-radius:10px;
+
+  overflow:hidden;
+}
+
+.map-toolbar{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-bottom:10px;
+
+  flex-wrap:wrap;
+}
+
+.map-toolbar input,
+.map-toolbar select{
+
+  padding:10px;
+
+  border:1px solid #ddd;
+
+  border-radius:8px;
+
+  min-width:200px;
+}
+
+.marker-normal{
+
+  width:14px;
+  height:14px;
+
+  border-radius:50%;
+
+  background:#2196f3;
+
+  border:2px solid white;
+}
+
+.marker-selected{
+
+  width:24px;
+  height:24px;
+
+  border-radius:50%;
+
+  background:#ff9800;
+
+  border:3px solid white;
+
+  animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+
+  0%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.5);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+}
