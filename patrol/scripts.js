@@ -3,11 +3,18 @@
 // ========================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbziE2uoPTZrjc3kYiYGmrNSRSbS4JXtBeUNIyjltUts0VEG0G4SuDOWgFgCbUxfvLoO/exec';
 
+
 // ========================================
 // GLOBAL VARIABLES
 // ========================================
 let currentUser = null;
 let pendingUsername = null;
+const WEBAPP_URL =
+'https://script.google.com/macros/s/AKfycbyJlYo45vlmW60uJW8Py78_BTHaHhKMl617xKCvnlu5IcxPb2-4pndemNO3PXuH8gQ/exec';
+
+let map;
+let locations = [];
+let markers = [];
 
 // ========================================
 // AUTO LOGOUT CONFIG (ms)
@@ -708,15 +715,24 @@ function showPage(page) {
     home: {
       title: 'Home',
       html: `
-      <iframe
-        src="https://datastudio.google.com/embed/reporting/872610ff-5cf7-4c01-ac0e-418f6a53d57c/page/p_7v9hglpe3d"
-        width="100%"
-        height="900"
-        style="border:none; border-radius:10px;"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        allowfullscreen>
-      </iframe>
+      <div class="map-toolbar">
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search Location">
+
+      <select id="categoryFilter">
+        <option value="">All Category</option>
+      </select>
+
+      <select id="statusFilter">
+        <option value="">All Status</option>
+      </select>
+
+    </div>
+
+    <div id="map"></div>
     `
     },
 
@@ -817,6 +833,10 @@ function showPage(page) {
   title.textContent = pageData.title;
   content.innerHTML = pageData.html;
 
+  if(page === 'map'){
+    initMap();
+  }
+
   if (page === 'profile') {
     document
       .getElementById('profileForm')
@@ -907,4 +927,51 @@ function resetLogoutTimer() {
 
   }, AUTO_LOGOUT_TIME);
 
+}
+
+async function initMap(){
+
+  if(map){
+    map.remove();
+  }
+
+  map = L.map('map');
+
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution:'© OpenStreetMap'
+    }
+  ).addTo(map);
+
+  const res =
+    await fetch(WEBAPP_URL);
+
+  locations =
+    await res.json();
+
+  buildFilters();
+
+  renderMarkers(locations);
+
+  document
+    .getElementById('searchInput')
+    .addEventListener(
+      'keyup',
+      applyFilter
+    );
+
+  document
+    .getElementById('categoryFilter')
+    .addEventListener(
+      'change',
+      applyFilter
+    );
+
+  document
+    .getElementById('statusFilter')
+    .addEventListener(
+      'change',
+      applyFilter
+    );
 }
