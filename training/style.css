@@ -498,10 +498,13 @@ body {
     padding:10px;
    }
    
-   .card{
-    width:100%;
-    min-height:100px;
-    margin-bottom:10px;
+    .card{
+    min-height: calc(100dvh - 120px);
    }
+
+   .page-content{
+  min-height: calc(100dvh - 80px);
+   }
+
    
 }
