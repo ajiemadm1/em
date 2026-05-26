@@ -702,12 +702,25 @@ function showPage(page) {
 
   const title = document.getElementById('pageTitle');
   const content = document.getElementById('pageContent');
-
+  const isMobile = window.innerWidth <= 768;
+  
   const pages = {
 
     home: {
       title: 'Home',
-      html: `
+      html: isMobile ? `
+      <iframe
+        src="https://datastudio.google.com/embed/reporting/3bc89811-bd14-4164-9d2b-9ae9f2654025/page/p_7v9hglpe3d"
+        width="100%"
+        width: 100%;
+        max-width: 480px;
+        margin: auto;
+        style="border:none; border-radius:10px;"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen>
+      </iframe>
+    ` : `
       <iframe
         src="https://datastudio.google.com/embed/reporting/872610ff-5cf7-4c01-ac0e-418f6a53d57c/page/p_7v9hglpe3d"
         width="100%"
