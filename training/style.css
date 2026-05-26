@@ -502,9 +502,5 @@ body {
     min-height: calc(100dvh - 120px);
    }
 
-   .page-content{
-  min-height: calc(100dvh - 80px);
-   }
-
    
 }
