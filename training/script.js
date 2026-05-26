@@ -827,6 +827,13 @@ function showPage(page) {
 
   title.textContent = pageData.title;
   content.innerHTML = pageData.html;
+  
+  const card = document.querySelector('.card');
+    if(page === 'home'){
+        card.style.padding = '0';
+    } else {
+        card.style.padding = '30px';
+    }
 
   if (page === 'profile') {
     document
