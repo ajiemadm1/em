@@ -712,8 +712,8 @@ function showPage(page) {
       <iframe
         src="https://datastudio.google.com/embed/reporting/3bc89811-bd14-4164-9d2b-9ae9f2654025/page/p_7v9hglpe3d"
         width="100%"
-        height="1800"
-        style="border:none; border-radius:10px;"
+        height="100%"
+        style="border:none;"
         loading="lazy">
         referrerpolicy="no-referrer-when-downgrade"
         allowfullscreen>
