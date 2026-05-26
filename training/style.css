@@ -490,4 +490,18 @@ body {
   .auth-card {
     padding: 30px 24px;
   }
+
+   .container{
+    width:100%;
+    max-width:430px;
+    margin:auto;
+    padding:10px;
+   }
+   
+   .card{
+    width:100%;
+    min-height:100px;
+    margin-bottom:10px;
+   }
+   
 }
