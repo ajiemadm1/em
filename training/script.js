@@ -2,6 +2,7 @@
 // CONFIGURATION
 // ========================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbziE2uoPTZrjc3kYiYGmrNSRSbS4JXtBeUNIyjltUts0VEG0G4SuDOWgFgCbUxfvLoO/exec';
+const PostTest_URL = 'https://script.google.com/macros/s/AKfycby4hffxpr4HsjtMKI9WLiWZVi_O_wYAo-wTXDolzKacC_rHuAsRrZHlqu71e9F-7Leh/exec';
 
 // ========================================
 // GLOBAL VARIABLES
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   restoreSession();
+  loadExamMenu();
 });
 
 // ========================================
@@ -924,5 +926,53 @@ function resetLogoutTimer() {
     }, 1200);
 
   }, AUTO_LOGOUT_TIME);
+
+}
+
+async function loadExamMenu() {
+
+  try {
+
+    const response = await fetch(
+      `${API_URL}?action=listExam`
+    );
+
+    const exams = await response.json();
+
+    const submenu =
+      document.getElementById('examSubmenu');
+
+    submenu.innerHTML = '';
+
+    exams.forEach(exam => {
+
+      submenu.innerHTML += `
+        <a
+          href="#"
+          class="exam-link"
+          data-title="${exam.detail}"
+          onclick="openExam('${exam.caseId}')"
+        >
+          ${exam.caseId}
+        </a>
+      `;
+
+    });
+
+  }
+  catch(error) {
+
+    console.error(
+      'Load Exam Error:',
+      error
+    );
+
+  }
+
+}
+
+function openExam(caseId){
+
+  alert(caseId);
 
 }
