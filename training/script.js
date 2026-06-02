@@ -932,7 +932,7 @@ function resetLogoutTimer() {
 async function loadExamMenu() {
 
   try {
-
+    console.log('LOAD EXAM MENU START');
     const response = await fetch(
       `${PostTest_URL}?action=listExam`
     );
@@ -941,6 +941,7 @@ async function loadExamMenu() {
 
     const submenu =
       document.getElementById('examSubmenu');
+    console.log('SUBMENU:', submenu);
 
     submenu.innerHTML = '';
 
@@ -968,6 +969,7 @@ async function loadExamMenu() {
     );
 
   }
+
 
 }
 
