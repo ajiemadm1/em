@@ -934,7 +934,7 @@ async function loadExamMenu() {
   try {
 
     const response = await fetch(
-      `${API_URL}?action=listExam`
+      `${PostTest_URL}?action=listExam`
     );
 
     const exams = await response.json();
