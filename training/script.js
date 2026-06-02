@@ -948,13 +948,12 @@ async function loadExamMenu() {
     exams.forEach(exam => {
 
       submenu.innerHTML += `
-        <a
-          href="#"
-          class="exam-link"
-          data-title="${exam.detail}"
-          onclick="openExam('${exam.caseId}')"
+         <a
+            href="#"
+            title="${exam.detail}"
+            onclick="openExam('${exam.caseId}')"
         >
-          ${exam.caseId}
+            ${exam.caseId}
         </a>
       `;
 
