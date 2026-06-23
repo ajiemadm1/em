@@ -59,26 +59,70 @@ function renderExamInfo(exam) {
   const content = document.getElementById("pageContent");
 
   content.innerHTML = `
-    <div class="exam-container">
+  <div class="exam-wrapper">
 
-      <div class="exam-header">
-        <h2>${exam.title}</h2>
+    <!-- HEADER -->
+    <div class="exam-hero">
+
+      <div class="exam-title">
+        <h1>${exam.title}</h1>
+        <p class="exam-subtitle">Training & Assessment Module</p>
       </div>
 
-      <div class="exam-pdf">
-        <iframe src="${exam.pdf}" style="width:100%;height:500px;border:0;"></iframe>
-      </div>
+      <div class="exam-badges">
+        <div class="badge">
+          ⏱ ${exam.duration} Minutes
+        </div>
 
-      <div class="exam-info">
-        <div>⏱ ${exam.duration} Minutes</div>
-        <div>🎯 Passing: ${exam.passing}</div>
-      </div>
+        <div class="badge">
+          🎯 Passing ${exam.passing}
+        </div>
 
-      <div id="examAction">
-        ${renderExamButton(exam)}
+        <div class="badge">
+          📘 ${exam.totalQuestion || '-'} Questions
+        </div>
       </div>
 
     </div>
+
+    <!-- CONTENT -->
+    <div class="exam-body">
+
+      <!-- PDF -->
+      <div class="exam-card pdf-card">
+        <div class="card-header">
+          📄 Material
+        </div>
+
+        <iframe
+          class="pdf-frame"
+          src="${exam.pdf}"
+          loading="lazy">
+        </iframe>
+      </div>
+
+      <!-- ACTION PANEL -->
+      <div class="exam-card action-card">
+
+        <h3>Ready to Start?</h3>
+
+        <p>
+          Pastikan kamu sudah membaca materi sebelum memulai exam.
+        </p>
+
+        <div class="exam-meta">
+          <div>⚠️ Timer akan berjalan setelah start</div>
+          <div>🔒 Tidak bisa pause</div>
+          <div>📌 Auto submit saat waktu habis</div>
+        </div>
+
+        ${renderExamButton(exam)}
+
+      </div>
+
+    </div>
+
+  </div>
   `;
 }
 
@@ -89,14 +133,14 @@ function renderExamButton(exam) {
 
   if (exam.passed) {
     return `
-      <button class="btn-primary" disabled>
-        ✅ Already Passed (Score: ${exam.lastScore})
+      <button class="btn-disabled" disabled>
+        ✅ Already Completed
       </button>
     `;
   }
 
   return `
-    <button class="btn-primary" onclick="startExam('${exam.caseId}')">
+    <button class="btn-start" onclick="startExam('${exam.caseId}')">
       🚀 Start Exam
     </button>
   `;
