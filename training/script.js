@@ -2,7 +2,7 @@
 // CONFIGURATION
 // ========================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbziE2uoPTZrjc3kYiYGmrNSRSbS4JXtBeUNIyjltUts0VEG0G4SuDOWgFgCbUxfvLoO/exec';
-const PostTest_URL = 'https://script.google.com/macros/s/AKfycby4hffxpr4HsjtMKI9WLiWZVi_O_wYAo-wTXDolzKacC_rHuAsRrZHlqu71e9F-7Leh/exec';
+const PostTest_URL = 'https://script.google.com/macros/s/AKfycbxIg2uWYgHv_z5B7NHSMgIS3UMduXUMQbzV4c8ppNgrBzfQeBkzS3jOAuZRpq4G7eA/exec';
 
 // ========================================
 // GLOBAL VARIABLES
