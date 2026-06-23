@@ -972,8 +972,8 @@ async function loadExamMenu() {
 
 }
 
-function openExam(caseId){
+//function openExam(caseId){
 
-  alert(caseId);
+//  alert(caseId);
 
-}
+//}
