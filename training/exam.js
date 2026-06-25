@@ -65,9 +65,7 @@ function renderExamInfo(exam) {
       <div class="hero-left">
       <h1>${exam.title}</h1>
       <p>
-      Materi ini membahas sistem HVAC (Heating, Ventilation,
-      and Air Conditioning) dan Refrigeration Systems,
-      komponen, prinsip kerja, serta aplikasinya.
+      Training & Assessment Module
       </p>
       </div>
 
@@ -138,6 +136,7 @@ function renderExamInfo(exam) {
             </h3>
       
             <ul>
+              <li></li>
               <li>Baca materi terlebih dahulu</li>
               <li>Pastikan koneksi stabil</li>
               <li>Jangan refresh halaman</li>
