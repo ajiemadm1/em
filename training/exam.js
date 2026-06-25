@@ -59,6 +59,8 @@ function renderExamInfo(exam) {
   const content = document.getElementById("pageContent");
   const title = document.getElementById('pageTitle');
 
+  title.textContent =
+    exam.caseId + ' - ' + exam.title;
 
   content.innerHTML = `
     <div class="exam-hero">
