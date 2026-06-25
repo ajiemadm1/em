@@ -110,29 +110,34 @@ function renderExamInfo(exam) {
         
           </div>
         
-          <div class="stat-card attempt">
-        
-            <div class="icon">🔄</div>
-        
-            <div>
-              <small>
+         <div class="stat-card attempt">
+
+              <div class="icon">
                 ${
-                  Number(exam.maxAttempt) === 0
-                    ? 'Attempts'
-                    : 'Max Attempt'
+                  exam.allowRetest === 'N'
+                    ? '🔒'
+                    : '🔄'
                 }
-              </small>
-        
-              <h3>
-                ${
-                  Number(exam.maxAttempt) === 0
-                    ? 'Unlimited'
-                    : exam.maxAttempt
-                }
-              </h3>
-        
-            </div>
-        
+              </div>
+            
+              <div>
+            
+                <small>Max Attempt</small>
+            
+                <h3>
+                  ${
+                    exam.allowRetest === 'N'
+                      ? 'Not Allowed'
+                      : (
+                          Number(exam.maxAttempt) === 0
+                            ? 'Unlimited'
+                            : exam.maxAttempt
+                        )
+                  }
+                </h3>
+            
+              </div>
+            
           </div>
 
     </div>
@@ -161,9 +166,10 @@ function renderExamInfo(exam) {
               <i class="fa fa-list-check"></i>
               Petunjuk Ujian
             </h3>
-      
+    
+            <br>
+            
             <ul>
-              <li></li>
               <li>Baca materi terlebih dahulu</li>
               <li>Pastikan koneksi stabil</li>
               <li>Jangan refresh halaman</li>
@@ -261,6 +267,8 @@ function renderExamStatus(exam){
       <p>
         Belum mengerjakan ujian ini.
       </p>
+
+      <br><br>
 
       ${renderExamButton(exam)}
 
