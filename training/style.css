@@ -795,35 +795,67 @@ body {
 .exam-stat-grid{
   display:grid;
   grid-template-columns:
-  repeat(4,1fr);
-
-  gap:20px;
-
+    repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
   margin-top:20px;
 }
 
 .stat-card{
-  background:white;
-
-  border-radius:20px;
-
-  padding:25px;
-
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
   display:flex;
   align-items:center;
-  gap:20px;
-
-  box-shadow:
-  0 10px 25px rgba(0,0,0,.08);
+  gap:15px;
+  border:1px solid #e5e7eb;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-.stat-card .icon{
-  font-size:35px;
+.stat-card small{
+  display:block;
+  color:#6b7280;
+  font-size:12px;
 }
 
 .stat-card h3{
-  margin:0;
-  font-size:34px;
+  margin:4px 0;
+  font-size:24px;
+  font-weight:700;
+}
+
+.stat-card span{
+  font-size:12px;
+  color:#6b7280;
+}
+
+.icon{
+  font-size:32px;
+  width:50px;
+  text-align:center;
+}
+
+/* Duration */
+.duration .icon,
+.duration h3{
+  color:#2563eb;
+}
+
+/* Passing */
+.passing .icon,
+.passing h3{
+  color:#16a34a;
+}
+
+/* Question */
+.question .icon,
+.question h3{
+  color:#ea580c;
+}
+
+/* Attempt */
+.attempt .icon,
+.attempt h3{
+  color:#dc2626;
 }
 
 .exam-content{
