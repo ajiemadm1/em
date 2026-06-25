@@ -74,40 +74,67 @@ function renderExamInfo(exam) {
       </div>
     </div>
 
-    <div class="exam-stat-grid">
+   <div class="exam-stat-grid">
 
-        <div class="stat-card">
-          <div class="icon">⏱</div>
-          <div>
-            <small>Duration</small>
-            <h3>${exam.duration}</h3>
-            <span>Minutes</span>
+          <div class="stat-card duration">
+        
+            <div class="icon">⏱</div>
+        
+            <div>
+              <small>Duration</small>
+              <h3>${exam.duration}</h3>
+              <span>Minutes</span>
+            </div>
+        
           </div>
-        </div>
-      
-        <div class="stat-card">
-          <div class="icon">🎯</div>
-          <div>
-            <small>Passing Score</small>
-            <h3>${exam.passing}</h3>
+        
+          <div class="stat-card passing">
+        
+            <div class="icon">🎯</div>
+        
+            <div>
+              <small>Passing Score</small>
+              <h3>${exam.passing}</h3>
+            </div>
+        
           </div>
-        </div>
-      
-        <div class="stat-card">
-          <div class="icon">📋</div>
-          <div>
-            <small>Total Questions</small>
-            <h3>${exam.totalQuestion}</h3>
+        
+          <div class="stat-card question">
+        
+            <div class="icon">📋</div>
+        
+            <div>
+              <small>Total Questions</small>
+              <h3>${exam.totalQuestion}</h3>
+            </div>
+        
           </div>
-        </div>
-      
-        <div class="stat-card">
-          <div class="icon">🔄</div>
-          <div>
-            <small>Max Attempt</small>
-            <h3>${exam.maxAttempt}</h3>
+        
+          <div class="stat-card attempt">
+        
+            <div class="icon">🔄</div>
+        
+            <div>
+              <small>
+                ${
+                  Number(exam.maxAttempt) === 0
+                    ? 'Attempts'
+                    : 'Max Attempt'
+                }
+              </small>
+        
+              <h3>
+                ${
+                  Number(exam.maxAttempt) === 0
+                    ? 'Unlimited'
+                    : exam.maxAttempt
+                }
+              </h3>
+        
+            </div>
+        
           </div>
-        </div>
+
     </div>
 
     <div class="exam-content">
