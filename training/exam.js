@@ -61,70 +61,184 @@ function renderExamInfo(exam) {
 
 
   content.innerHTML = `
-  <div class="exam-wrapper">
-
-    <!-- HEADER -->
     <div class="exam-hero">
-
-      <div class="exam-title">
-        <h1>${exam.title}</h1>
-        <p class="exam-subtitle">Training & Assessment Module</p>
+      <div class="hero-left">
+      <h1>${exam.title}</h1>
+      <p>
+      Materi ini membahas sistem HVAC (Heating, Ventilation,
+      and Air Conditioning) dan Refrigeration Systems,
+      komponen, prinsip kerja, serta aplikasinya.
+      </p>
       </div>
 
-      <div class="exam-badges">
-        <div class="badge">
-          ⏱ ${exam.duration} Minutes
-        </div>
-
-        <div class="badge">
-          🎯 Passing ${exam.passing}
-        </div>
-
-        <div class="badge">
-          📘 ${exam.totalQuestion || '-'} Questions
-        </div>
+      <div class="hero-right">
+          <i class="fa-solid fa-fan"></i>
       </div>
-
     </div>
 
-    <!-- CONTENT -->
-    <div class="exam-body">
+    <div class="exam-stat-grid">
 
-      <!-- PDF -->
-      <div class="exam-card pdf-card">
-        <div class="card-header">
-          📄 Material
+        <div class="stat-card">
+          <div class="icon">⏱</div>
+          <div>
+            <small>Duration</small>
+            <h3>${exam.duration}</h3>
+            <span>Minutes</span>
+          </div>
+        </div>
+      
+        <div class="stat-card">
+          <div class="icon">🎯</div>
+          <div>
+            <small>Passing Score</small>
+            <h3>${exam.passing}</h3>
+          </div>
+        </div>
+      
+        <div class="stat-card">
+          <div class="icon">📋</div>
+          <div>
+            <small>Total Questions</small>
+            <h3>${exam.totalQuestion}</h3>
+          </div>
+        </div>
+      
+        <div class="stat-card">
+          <div class="icon">🔄</div>
+          <div>
+            <small>Max Attempt</small>
+            <h3>${exam.maxAttempt}</h3>
+          </div>
+        </div>
+    </div>
+
+    <div class="exam-content">
+
+        <div class="pdf-panel">
+      
+          <div class="panel-header">
+            <i class="fa fa-file-pdf"></i>
+            Material Training
+          </div>
+      
+          <iframe
+            src="${exam.pdf}"
+            class="pdf-frame">
+          </iframe>
+      
+        </div>
+      
+        <div class="exam-sidebar">
+      
+          <div class="side-card">
+      
+            <h3>
+              <i class="fa fa-list-check"></i>
+              Petunjuk Ujian
+            </h3>
+      
+            <ul>
+              <li>Baca materi terlebih dahulu</li>
+              <li>Pastikan koneksi stabil</li>
+              <li>Jangan refresh halaman</li>
+              <li>Auto submit saat waktu habis</li>
+            </ul>
+      
+          </div>
+      
+          <div class="side-card">
+      
+            <h3>
+              <i class="fa fa-user"></i>
+              Status Anda
+            </h3>
+      
+            <div id="examStatus">
+              ${renderExamStatus(exam)}
+            </div>
+      
+          </div>
+      
+        </div>
+    </div>
+
+  `;
+}
+
+// ========================================
+// RENDER BUTTON STATUS EXAM
+// ========================================
+function renderExamStatus(exam){
+
+  // Sudah lulus
+  if(exam.passed){
+
+    return `
+      <div class="status-pass">
+
+        <div class="status-icon">
+          ✅
         </div>
 
-        <iframe
-          class="pdf-frame"
-          src="${exam.pdf}"
-          loading="lazy">
-        </iframe>
-      </div>
-
-      <!-- ACTION PANEL -->
-      <div class="exam-card action-card">
-
-        <h3>Ready to Start?</h3>
+        <h4>
+          Exam Completed
+        </h4>
 
         <p>
-          Pastikan kamu sudah membaca materi sebelum memulai exam.
+          Score : ${exam.lastScore || '-'}
         </p>
 
-        <div class="exam-meta">
-          <div>⚠️ Timer akan berjalan setelah start</div>
-          <div>🔒 Tidak bisa pause</div>
-          <div>📌 Auto submit saat waktu habis</div>
-        </div>
-
-        ${renderExamButton(exam)}
+        <button
+          class="btn-disabled"
+          disabled
+        >
+          Already Passed
+        </button>
 
       </div>
+    `;
+  }
+
+  // Sedang ada session berjalan
+  if(exam.running){
+
+    return `
+      <div class="status-running">
+
+        <div class="status-icon">
+          ⏳
+        </div>
+
+        <h4>
+          Exam In Progress
+        </h4>
+
+        <button
+          class="btn-resume"
+          onclick="resumeExam('${exam.caseId}')"
+        >
+          Resume Exam
+        </button>
+
+      </div>
+    `;
+  }
+
+  // Belum pernah mengerjakan
+  return `
+    <div class="status-ready">
+
+      <div class="status-icon">
+        📚
+      </div>
+
+      <p>
+        Belum mengerjakan ujian ini.
+      </p>
+
+      ${renderExamButton(exam)}
 
     </div>
-
-  </div>
   `;
 }
 
