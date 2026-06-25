@@ -57,6 +57,8 @@ async function openExam(caseId) {
 function renderExamInfo(exam) {
 
   const content = document.getElementById("pageContent");
+  const title = document.getElementById('pageTitle');
+
 
   content.innerHTML = `
   <div class="exam-wrapper">
