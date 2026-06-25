@@ -60,7 +60,7 @@ function renderExamInfo(exam) {
   const title = document.getElementById('pageTitle');
 
   title.textContent =
-    exam.caseId + ' - ' + exam.title;
+    exam.caseId;
 
   content.innerHTML = `
     <div class="exam-hero">
