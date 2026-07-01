@@ -35,17 +35,17 @@ async function apiPost(data) {
 // =====================================================
 async function openExam(caseId){
 
-    console.log("caseId =", caseId);
+    if(Object.keys(window.examBuffer).length===0){
 
-    console.log("examBuffer =", window.examBuffer);
+        await loadExamMenu();
 
-    console.log("exam =", window.examBuffer[caseId]);
+    }
 
     const exam = window.examBuffer[caseId];
 
     if(!exam){
 
-        alert("Exam data not found.");
+        alert("Exam not found");
 
         return;
 
