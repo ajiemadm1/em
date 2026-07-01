@@ -35,6 +35,12 @@ async function apiPost(data) {
 // =====================================================
 async function openExam(caseId){
 
+    console.log("caseId =", caseId);
+
+    console.log("examBuffer =", window.examBuffer);
+
+    console.log("exam =", window.examBuffer[caseId]);
+
     const exam = window.examBuffer[caseId];
 
     if(!exam){
