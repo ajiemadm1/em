@@ -9,6 +9,7 @@ const PostTest_URL = 'https://script.google.com/macros/s/AKfycbxIg2uWYgHv_z5B7NH
 // ========================================
 let currentUser = null;
 let pendingUsername = null;
+window.examBuffer = {};
 
 // ========================================
 // AUTO LOGOUT CONFIG (ms)
@@ -53,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   restoreSession();
-  loadExamMenu();
 });
 
 // ========================================
@@ -436,6 +436,8 @@ function loadDashboard() {
   document
     .getElementById('userNameDisplay')
     .textContent = currentUser.fullname || currentUser.username;
+
+  await loadExamMenu();
 
   if (typeof showPage === 'function') {
   showPage('home');
