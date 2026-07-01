@@ -33,22 +33,15 @@ async function apiPost(data) {
 // =====================================================
 // OPEN EXAM PAGE (INFO ONLY)
 // =====================================================
-async function openExam(caseId) {
-  showLoading();
+async function openExam(caseId){
 
-  try {
-    currentCaseId = caseId;
-
-    const exam = await apiGet({
-      action: "getExam",
-      caseId
-    });
+    const exam=
+        window.examBuffer[
+            caseId
+        ];
 
     renderExamInfo(exam);
 
-  } finally {
-    hideLoading();
-  }
 }
 
 // =====================================================
