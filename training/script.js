@@ -929,46 +929,53 @@ function resetLogoutTimer() {
 
 }
 
-async function loadExamMenu() {
+window.examBuffer={};
 
-  try {
-    console.log('LOAD EXAM MENU START');
-    const response = await fetch(
-      `${PostTest_URL}?action=listExam`
-    );
+async function loadExamMenu(){
 
-    const exams = await response.json();
+    const response=
+        await fetch(
+        `${PostTest_URL}?action=listExam&user=${currentUser.username}`
+        );
 
-    const submenu =
-      document.getElementById('examSubmenu');
-    console.log('SUBMENU:', submenu);
+    const exams=
+        await response.json();
 
-    submenu.innerHTML = '';
+    const submenu=
+        document.getElementById(
+            'examSubmenu'
+        );
 
-    exams.forEach(exam => {
+    submenu.innerHTML='';
 
-      submenu.innerHTML += `
-         <a
-            href="#"
-            title="${exam.detail}"
-            onclick="openExam('${exam.caseId}')"
-        >
+    exams.forEach(exam=>{
+
+        //------------------------------------------------
+        // BUFFER
+        //------------------------------------------------
+
+        window.examBuffer[
+            exam.caseId
+        ]=exam;
+
+        submenu.innerHTML+=`
+
+        <a href="#">
+
             ${exam.caseId}
+
         </a>
-      `;
+
+        `;
+
+        submenu
+        .lastElementChild
+        .addEventListener(
+            'click',
+            ()=>openExam(exam.caseId)
+        );
 
     });
-
-  }
-  catch(error) {
-
-    console.error(
-      'Load Exam Error:',
-      error
-    );
-
-  }
-
 
 }
 
