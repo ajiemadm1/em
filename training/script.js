@@ -423,7 +423,7 @@ async function restoreSession() {
 // ========================================
 // LOAD DASHBOARD
 // ========================================
-function loadDashboard() {
+async function loadDashboard() {
 
   document
     .getElementById('authContainer')
@@ -931,55 +931,50 @@ function resetLogoutTimer() {
 
 }
 
-window.examBuffer={};
 
 async function loadExamMenu(){
 
-    const response=
-        await fetch(
-        `${PostTest_URL}?action=listExam&user=${currentUser.username}`
-        );
+    if(!currentUser) return;
 
-    const exams=
-        await response.json();
+    window.examBuffer={};
 
-    const submenu=
-        document.getElementById(
-            'examSubmenu'
-        );
+    const response = await fetch(
+        `${PostTest_URL}?action=listExam&user=${encodeURIComponent(currentUser.username)}`
+    );
 
-    submenu.innerHTML='';
+    const exams = await response.json();
+
+    console.log(exams);
+
+    const submenu =
+        document.getElementById("examSubmenu");
+
+    submenu.innerHTML="";
 
     exams.forEach(exam=>{
 
-        //------------------------------------------------
-        // BUFFER
-        //------------------------------------------------
+        window.examBuffer[exam.caseId]=exam;
 
-        window.examBuffer[
-            exam.caseId
-        ]=exam;
+        const a=document.createElement("a");
 
-        submenu.innerHTML+=`
+        a.href="#";
 
-        <a href="#">
+        a.textContent=exam.caseId;
 
-            ${exam.caseId}
+        a.addEventListener("click",(e)=>{
 
-        </a>
+            e.preventDefault();
 
-        `;
+            openExam(exam.caseId);
 
-        submenu
-        .lastElementChild
-        .addEventListener(
-            'click',
-            ()=>openExam(exam.caseId)
-        );
+        });
+
+        submenu.appendChild(a);
 
     });
 
 }
+
 
 //function openExam(caseId){
 
