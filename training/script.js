@@ -934,9 +934,28 @@ function resetLogoutTimer() {
 
 async function loadExamMenu(){
 
-    if(!currentUser) return;
+    console.log("LOAD MENU");
 
-    window.examBuffer={};
+    const response = await fetch(
+        `${PostTest_URL}?action=listExam&user=${currentUser.username}`
+    );
+
+    const exams = await response.json();
+
+    console.log("TOTAL EXAM =", exams.length);
+
+    exams.forEach(exam=>{
+
+        console.log("ADD", exam.caseId);
+
+        window.examBuffer[exam.caseId]=exam;
+
+    });
+
+    console.log("BUFFER =", window.examBuffer);
+
+    
+    if(!currentUser) return;
 
     const response = await fetch(
         `${PostTest_URL}?action=listExam&user=${encodeURIComponent(currentUser.username)}`
