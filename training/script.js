@@ -959,6 +959,8 @@ async function loadExamMenu(){
 
         a.textContent=exam.caseId;
 
+        a.title = exam.title;      // <-- Tooltip browser
+
         a.addEventListener("click",(e)=>{
 
             e.preventDefault();
