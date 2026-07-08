@@ -257,6 +257,8 @@ function renderExamStatus(exam){
           Exam In Progress
         </h4>
 
+        <br><br>
+
         <button
           class="btn-resume"
           onclick="resumeExam('${exam.caseId}')"
@@ -266,6 +268,43 @@ function renderExamStatus(exam){
 
       </div>
     `;
+  }
+
+  //-------------------------------------------------
+  // 3. ATTEMPT HABIS / TIDAK BOLEH START
+  //-------------------------------------------------
+  if(!exam.canStart){
+
+    return `
+      <div class="status-failed">
+
+        <div class="status-icon">
+          ❌
+        </div>
+
+        <h4>Exam Failed</h4>
+
+        <p>
+          Last Score : <b>${exam.lastScore}</b>
+        </p>
+
+        <p>
+          Attempt : ${exam.attempt}
+        </p>
+
+        <br><br>
+
+        <button
+          class="btn-disabled"
+          disabled>
+
+          No More Attempt
+
+        </button>
+
+      </div>
+    `;
+
   }
 
   // Belum pernah mengerjakan
