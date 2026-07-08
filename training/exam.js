@@ -227,7 +227,7 @@ function renderExamStatus(exam){
         </p>
 
         <p>
-          Attemp : ${exam.Attemp || '-'}
+          Attemp : ${exam.attempt || '-'}
         </p>
 
         <br><br>
