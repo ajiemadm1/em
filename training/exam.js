@@ -190,6 +190,8 @@ function renderExamInfo(exam) {
               <i class="fa fa-user"></i>
               Status Anda
             </h3>
+
+            <br><br>
       
             <div id="examStatus">
               ${renderExamStatus(exam)}
