@@ -226,6 +226,12 @@ function renderExamStatus(exam){
           Score : ${exam.lastScore || '-'}
         </p>
 
+        <p>
+          Attemp : ${exam.Attemp || '-'}
+        </p>
+
+        <br><br>
+          
         <button
           class="btn-disabled"
           disabled
